@@ -1,0 +1,86 @@
+/* Footer specific styles */
+.footer-logo {
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  fill: currentColor !important;
+  stroke: currentColor !important;
+  stroke-width: 0 !important;
+  width: 2rem !important;
+  height: 2rem !important;
+  color: #60a5fa !important; /* text-blue-400 */
+}
+
+.footer-title {
+  color: white !important;
+  font-weight: 700 !important;
+  font-size: 1.5rem !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+  letter-spacing: -0.025em !important;
+}
+
+.footer-icon {
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  fill: currentColor !important;
+  stroke-width: 0 !important;
+}
+
+.footer-social-icon {
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  fill: currentColor !important;
+  color: #9ca3af !important; /* text-gray-300 */
+  height: 1.5rem !important;
+  width: 1.5rem !important;
+}
+
+/* Fix icon visibility in specific footer components */
+footer svg, .footer-logo, .footer-icon, .footer-social-icon {
+  fill: currentColor !important;
+  visibility: visible !important;
+  display: inline-block !important;
+  opacity: 1 !important;
+}
+
+/* Improve visibility of footer headings */
+footer h3, footer h4 {
+  color: white !important;
+  font-weight: 700 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Improve contrast for footer links */
+footer a.text-gray-300 {
+  color: #d1d5db !important;
+}
+
+footer a.text-gray-300:hover {
+  color: white !important;
+}
+
+/* Improve visibility of footer contact info */
+footer .text-gray-300 {
+  color: #d1d5db !important;
+}
+
+/* Dark mode specific improvements */
+@media (prefers-color-scheme: dark) {
+  .footer-logo,
+  .footer-icon,
+  .footer-social-icon {
+    fill: currentColor !important;
+    stroke: currentColor !important;
+    visibility: visible !important;
+  }
+  
+  .footer-title {
+    color: white !important;
+  }
+  
+  footer svg {
+    fill: currentColor !important;
+  }
+} 

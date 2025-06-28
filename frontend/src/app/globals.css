@@ -1,0 +1,583 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-family);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-family);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Improve text rendering for better visibility */
+input, button, a, p, h1, h2, h3, h4, h5, h6, span, div, label {
+  text-rendering: optimizeLegibility;
+}
+
+/* Global font color improvements */
+.text-gray-500 {
+  color: #6b7280 !important;
+}
+
+.text-gray-600 {
+  color: #4b5563 !important;
+}
+
+.text-gray-700 {
+  color: #374151 !important;
+}
+
+.text-gray-800 {
+  color: #1f2937 !important;
+}
+
+.text-gray-900 {
+  color: #111827 !important;
+}
+
+/* Improve font weight for better visibility */
+label, p {
+  font-weight: 500 !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700 !important;
+}
+
+/* Improve input text visibility */
+input, select, textarea {
+  color: #1f2937 !important; /* text-gray-800 */
+  font-weight: 500 !important;
+}
+
+/* Specific styles for search inputs */
+input[type="text"][placeholder*="Search"] {
+  color: #000000 !important;
+  font-weight: 500 !important;
+  background-color: white !important;
+  border: 1px solid #d1d5db !important;
+}
+
+input[type="text"][placeholder*="Search"]::placeholder {
+  color: #4b5563 !important;
+  opacity: 1 !important;
+  font-weight: 400 !important;
+}
+
+/* Improve select dropdowns */
+select {
+  appearance: auto;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: 2.5rem;
+  print-color-adjust: exact;
+}
+
+select option {
+  color: #1f2937;
+  background-color: white;
+  padding: 0.5rem;
+}
+
+/* Dropdown menu styles */
+.dropdown-menu {
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Improve button text visibility */
+button, .btn {
+  font-weight: 500;
+}
+
+/* Improve link visibility */
+a {
+  color: #1d4ed8 !important; /* text-blue-700 */
+  font-weight: 500;
+}
+
+a:hover {
+  color: #1e40af !important; /* text-blue-800 */
+  text-decoration: underline;
+}
+
+/* Fix for small text */
+.text-xs, .text-sm {
+  font-weight: 450;
+}
+
+/* SVG Icon Improvements */
+svg {
+  display: inline-block;
+  vertical-align: middle;
+  shape-rendering: geometricPrecision;
+}
+
+/* Ensure SVG icons are visible */
+button svg, a svg {
+  stroke-width: 2;
+  fill: currentColor;
+}
+
+/* Improve contrast for icons in navigation */
+nav svg {
+  stroke-width: 2;
+  fill: currentColor;
+}
+
+/* Navbar icon specific styles */
+.navbar-icon {
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  fill: currentColor !important;
+  stroke: currentColor !important;
+  stroke-width: 0.5 !important;
+  width: 1.25rem !important;
+  height: 1.25rem !important;
+}
+
+/* Footer specific styles */
+.footer-logo {
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  fill: currentColor !important;
+  stroke: currentColor !important;
+  stroke-width: 0 !important;
+  width: 2rem !important;
+  height: 2rem !important;
+  color: #60a5fa !important; /* text-blue-400 */
+}
+
+.footer-title {
+  color: white !important;
+  font-weight: 700 !important;
+  font-size: 1.5rem !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+  letter-spacing: -0.025em !important;
+}
+
+.footer-icon {
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  fill: currentColor !important;
+  stroke-width: 0 !important;
+}
+
+.footer-social-icon {
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  fill: currentColor !important;
+  color: #9ca3af !important; /* text-gray-300 */
+  height: 1.5rem !important;
+  width: 1.5rem !important;
+}
+
+/* Ensure proper sizing for icons */
+.h-4, .w-4 {
+  height: 1rem !important;
+  width: 1rem !important;
+}
+
+.h-5, .w-5 {
+  height: 1.25rem !important;
+  width: 1.25rem !important;
+}
+
+.h-6, .w-6 {
+  height: 1.5rem !important;
+  width: 1.5rem !important;
+}
+
+/* Ensure icons in buttons have proper spacing */
+button svg + span, 
+a svg + span,
+.flex svg + span {
+  margin-left: 0.375rem;
+}
+
+/* Improve icon visibility in dark mode */
+@media (prefers-color-scheme: dark) {
+  button svg, a svg, nav svg {
+    fill: currentColor;
+    stroke: currentColor;
+    stroke-width: 0.5;
+  }
+  
+  .navbar-icon {
+    fill: white !important;
+    stroke: white !important;
+  }
+  
+  .footer-logo,
+  .footer-icon,
+  .footer-social-icon {
+    fill: currentColor !important;
+    visibility: visible !important;
+  }
+  
+  .footer-title {
+    color: white !important;
+  }
+}
+
+/* Enhanced icon visibility */
+svg {
+  fill: currentColor;
+  stroke: currentColor;
+  stroke-width: 1;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Button text contrast improvements */
+.bg-blue-600, .bg-blue-700, .bg-blue-800, .bg-indigo-600, .bg-indigo-700, .bg-purple-600, .bg-purple-700, .bg-green-600, .bg-green-700, .bg-red-600, .bg-red-700, .bg-gray-800, .bg-gray-900 {
+  color: white !important;
+  font-weight: 500;
+}
+
+/* Fix button hover text color */
+.bg-blue-600:hover, .bg-blue-700:hover, .bg-blue-800:hover,
+.bg-indigo-600:hover, .bg-indigo-700:hover, .bg-indigo-800:hover,
+.bg-purple-600:hover, .bg-purple-700:hover, .bg-purple-800:hover,
+.bg-green-600:hover, .bg-green-700:hover, .bg-green-800:hover,
+.bg-red-600:hover, .bg-red-700:hover, .bg-red-800:hover,
+.bg-yellow-600:hover, .bg-yellow-700:hover, .bg-yellow-800:hover,
+.bg-gray-800:hover, .bg-gray-900:hover {
+  color: white !important;
+}
+
+/* Fix button hover text color for nested elements */
+.bg-blue-600:hover *, .bg-blue-700:hover *, .bg-blue-800:hover *,
+.bg-indigo-600:hover *, .bg-indigo-700:hover *, .bg-indigo-800:hover *,
+.bg-purple-600:hover *, .bg-purple-700:hover *, .bg-purple-800:hover *,
+.bg-green-600:hover *, .bg-green-700:hover *, .bg-green-800:hover *,
+.bg-red-600:hover *, .bg-red-700:hover *, .bg-red-800:hover *,
+.bg-yellow-600:hover *, .bg-yellow-700:hover *, .bg-yellow-800:hover *,
+.bg-gray-800:hover *, .bg-gray-900:hover * {
+  color: white !important;
+}
+
+/* Improve button hover states */
+button:hover, .btn:hover {
+  opacity: 0.9;
+}
+
+/* Improve profile and order page text visibility */
+.orders-page h1, .orders-page h2, .orders-page h3,
+.profile-page h1, .profile-page h2, .profile-page h3 {
+  color: #111827 !important;
+  font-weight: 600;
+}
+
+.orders-page p, .profile-page p {
+  color: #374151 !important;
+  font-weight: 450;
+}
+
+/* Fix icon visibility in specific components */
+.product-card svg, .navbar svg, .cart-item svg, .scan-button svg, .dashboard-icon svg, nav svg, .navbar-icon, .footer-logo, .footer-icon, .footer-social-icon {
+  fill: currentColor;
+  visibility: visible !important;
+  display: inline-block !important;
+}
+
+/* Ensure white text on dark backgrounds */
+.bg-blue-600 *, .bg-blue-700 *, .bg-blue-800 *,
+.bg-indigo-600 *, .bg-indigo-700 *, .bg-indigo-800 *,
+.bg-purple-600 *, .bg-purple-700 *, .bg-purple-800 *,
+.bg-gray-800 *, .bg-gray-900 * {
+  color: white !important;
+}
+
+/* Ensure proper icon display in all contexts */
+[class*="icon"], [class*="Icon"], [class*="svg"], .navbar-icon, .footer-logo, .footer-icon, .footer-social-icon {
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Enhanced heading visibility */
+h1 {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  letter-spacing: -0.5px;
+}
+
+h1.border-b-2 {
+  box-shadow: 0 2px 4px -2px rgba(59, 130, 246, 0.3);
+}
+
+/* Enhanced page header contrast */
+.container > h1, .max-w-3xl > div > h1, .max-w-4xl > div > h1, .max-w-5xl > div > h1, .max-w-6xl > div > h1, .max-w-7xl > div > h1 {
+  font-size: 2rem !important;
+  font-weight: 700 !important;
+  color: #000000 !important;
+  margin-bottom: 2rem !important;
+}
+
+/* Make section headings more visible */
+h2 {
+  color: #111827 !important;
+  font-weight: 600 !important;
+}
+
+h3 {
+  color: #1f2937 !important;
+  font-weight: 600 !important;
+}
+
+/* EXTREME HEADER VISIBILITY */
+.container > h1, .max-w-3xl > h1, div > h1 {
+  background: linear-gradient(to right, #2563eb, #1d4ed8);
+  color: white !important;
+  padding: 0.75rem 1.5rem !important;
+  border-radius: 0.5rem !important;
+  margin-bottom: 1.5rem !important;
+  font-size: 1.875rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.025em !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+  border: none !important;
+  display: inline-block !important;
+  position: relative !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Specific page header styles */
+.orders-page h1, 
+.profile-page h1,
+.cart-page h1,
+.scan-page h1,
+.dashboard-page h1,
+.products-page h1 {
+  background: linear-gradient(to right, #2563eb, #1d4ed8) !important;
+  color: white !important;
+  padding: 0.75rem 1.5rem !important;
+  border-radius: 0.5rem !important;
+  margin-bottom: 1.5rem !important;
+  font-size: 1.875rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.025em !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+  border: none !important;
+  display: inline-block !important;
+  position: relative !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+  width: auto !important;
+  z-index: 10 !important;
+}
+
+/* Center aligned headers special style */
+.products-page h1 {
+  display: block !important;
+  width: fit-content !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Header animation for extra visibility */
+@keyframes headerPulse {
+  0% { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+  50% { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1); }
+  100% { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+}
+
+.orders-page h1, 
+.profile-page h1,
+.cart-page h1,
+.scan-page h1,
+.dashboard-page h1,
+.products-page h1 {
+  animation: headerPulse 2s ease-in-out infinite;
+}
+
+/* Footer specific styles */
+.footer-logo {
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  fill: currentColor !important;
+  stroke: currentColor !important;
+  stroke-width: 0 !important;
+  width: 2rem !important;
+  height: 2rem !important;
+  color: #60a5fa !important; /* text-blue-400 */
+}
+
+.footer-title {
+  color: white !important;
+  font-weight: 700 !important;
+  font-size: 1.5rem !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+  letter-spacing: -0.025em !important;
+}
+
+.footer-icon {
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  fill: currentColor !important;
+  stroke-width: 0 !important;
+}
+
+.footer-social-icon {
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  fill: currentColor !important;
+  color: #9ca3af !important; /* text-gray-300 */
+  height: 1.5rem !important;
+  width: 1.5rem !important;
+}
+
+/* Fix CTA section text visibility */
+.bg-gradient-to-r.from-gray-900.to-gray-800 h2,
+.bg-gradient-to-r.from-gray-900.to-gray-800 p {
+  color: white !important;
+  font-weight: 600 !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+  z-index: 10 !important;
+}
+
+/* Receipt page specific styles */
+.receipt-page h1, .receipt-page h2, .receipt-page h3 {
+  color: #111827 !important;
+  font-weight: 700 !important;
+}
+
+.receipt-page h4 {
+  color: #1f2937 !important;
+  font-weight: 600 !important;
+}
+
+.receipt-page p, .receipt-page span {
+  color: #1f2937 !important;
+  font-weight: 500 !important;
+}
+
+.receipt-page table {
+  font-family: 'Arial', sans-serif !important;
+}
+
+.receipt-page th {
+  font-weight: 700 !important;
+  color: #111827 !important;
+}
+
+.receipt-page td {
+  font-weight: 500 !important;
+  color: #1f2937 !important;
+}
+
+.receipt-page pre {
+  font-family: 'Courier New', monospace !important;
+  font-size: 12px !important;
+  line-height: 1.5 !important;
+}
+
+/* Print styles for receipt */
+@media print {
+  body {
+    background-color: white !important;
+    color: black !important;
+    font-size: 14px !important;
+  }
+  
+  .print\:hidden {
+    display: none !important;
+  }
+  
+  .receipt-page h1, .receipt-page h2, .receipt-page h3 {
+    color: black !important;
+  }
+  
+  .receipt-page p, .receipt-page span {
+    color: black !important;
+  }
+  
+  .receipt-page table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+  }
+  
+  .receipt-page th, .receipt-page td {
+    border: 1px solid #ddd !important;
+    padding: 8px !important;
+    color: black !important;
+  }
+  
+  .receipt-page svg[data-testid="qr-code"] {
+    border: 4px solid black !important;
+    padding: 16px !important;
+    max-width: 100% !important;
+    height: auto !important;
+  }
+  
+  .receipt-page .qr-container {
+    border: 4px solid black !important;
+    padding: 20px !important;
+    margin: 0 auto !important;
+    width: fit-content !important;
+    background-color: white !important;
+    page-break-inside: avoid !important;
+  }
+}
+
+/* Enhanced QR code styles */
+svg[data-testid="qr-code"] {
+  border: 3px solid #000000 !important;
+  padding: 12px !important;
+  background-color: white !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+}
+
+.qr-container {
+  background-color: white !important;
+  padding: 16px !important;
+  border: 3px solid #000000 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+}
+
+.qr-code {
+  display: block !important;
+  margin: 0 auto !important;
+  max-width: none !important;
+}
+
+/* QR code path styles to ensure high contrast */
+svg[data-testid="qr-code"] path {
+  fill: #000000 !important;
+  stroke: none !important;
+}
