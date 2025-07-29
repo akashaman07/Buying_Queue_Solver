@@ -314,7 +314,7 @@ export default function BarcodeScanner({ onDetected, onError, autoClose = true }
             id="camera-select"
             value={selectedCamera}
             onChange={handleCameraChange}
-            className="w-full p-2 border border-gray-300 rounded-md bg-white text-gray-800 font-medium shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+            className="w-full p-2 border border-gray-300 rounded-md bg-white text-gray-800 font-medium shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 appearance-none"
           >
             {cameras.length === 0 && (
               <option value="">No cameras found</option>
@@ -396,4 +396,4 @@ export default function BarcodeScanner({ onDetected, onError, autoClose = true }
       </div>
     </div>
   );
-} 
+}

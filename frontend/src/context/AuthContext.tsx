@@ -150,6 +150,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const res = await authAPI.login({ email, password });
       setUser(res.user);
       setIsAuthenticated(true);
+      
+      // Store the token in localStorage
+      if (res.token) {
+        localStorage.setItem('token', res.token);
+      }
+      
       return res;
     } catch (error: any) {
       console.error('Login error:', error);
@@ -168,6 +174,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const res = await authAPI.register(userData);
       setUser(res.user);
       setIsAuthenticated(true);
+      
+      // Store the token in localStorage
+      if (res.token) {
+        localStorage.setItem('token', res.token);
+      }
+      
       return res;
     } catch (error: any) {
       console.error('Register error:', error);
@@ -184,6 +196,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(null);
     setIsAuthenticated(false);
     localStorage.removeItem('mockUser');
+    localStorage.removeItem('token');
     router.push('/');
     toast.info('Logged out successfully');
   };
@@ -235,4 +248,4 @@ export const useAuth = () => {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
-}; 
+};

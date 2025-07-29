@@ -269,7 +269,7 @@ export default function NewProductPage() {
                 name="category"
                 value={formData.category}
                 onChange={handleChange}
-                className="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                className="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 appearance-none"
                 required
               >
                 <option value="">Select a category</option>

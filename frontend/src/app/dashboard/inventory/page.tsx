@@ -34,71 +34,162 @@ export default function InventoryPage() {
   const router = useRouter();
 
   useEffect(() => {
-    // Redirect if not authenticated or not a seller
-    if (!isLoading && (!isAuthenticated || user?.role !== 'seller')) {
+    // Redirect if not authenticated or not a seller/admin
+    if (!isLoading && (!isAuthenticated || (user?.role !== 'seller' && user?.role !== 'admin'))) {
       router.push('/login');
-    } else {
+    } else if (!isLoading) {
+      // Only fetch products when authentication check is complete and user is authenticated
       fetchProducts();
     }
   }, [isAuthenticated, user, router, isLoading]);
 
+  // Add a ref to track if products are already being fetched
+  const [isFetching, setIsFetching] = useState(false);
+
   const fetchProducts = async () => {
+    // Prevent duplicate API calls
+    if (isFetching) return;
+    
     try {
       setIsLoading(true);
-      // In a production app, we would fetch from the API
-      // const response = await productsAPI.getAllProducts();
-      // setProducts(response.data);
+      setIsFetching(true);
       
-      // Using mock data for now
+      // Call the API to get all products
+      const response = await productsAPI.getAllProducts();
+      console.log('Fetched products:', response);
+      
+      // Map the API response to our Product interface
+      const fetchedProducts: Product[] = response.data.map((product: any) => ({
+        id: product._id,
+        name: product.name,
+        category: product.category || 'Uncategorized',
+        price: product.price,
+        stock: product.stock || 0,
+        status: product.stock > 10 ? 'In Stock' : product.stock > 0 ? 'Low Stock' : 'Out of Stock',
+        sku: product.sku || `SKU-${product._id.substring(0, 6)}`,
+        barcode: product.barcode || ''
+      }));
+      
+      // If no products are returned or there's an error, use mock data as fallback
+      if (!fetchedProducts || fetchedProducts.length === 0) {
+        console.log('No products found, using mock data');
+        const mockProducts: Product[] = [
+          {
+            id: 'PRD001',
+            name: 'Smartphone X',
+            category: 'Electronics',
+            price: 699.99,
+            stock: 15,
+            status: 'In Stock',
+            sku: 'ELEC-SP-001',
+            barcode: '1234567890123'
+          },
+          {
+            id: 'PRD002',
+            name: 'Wireless Headphones',
+            category: 'Electronics',
+            price: 149.99,
+            stock: 8,
+            status: 'Low Stock',
+            sku: 'ELEC-WH-002',
+            barcode: '2345678901234'
+          },
+          {
+            id: 'PRD003',
+            name: 'Premium T-Shirt',
+            category: 'Clothing',
+            price: 29.99,
+            stock: 25,
+            status: 'In Stock',
+            sku: 'CLOTH-TS-003',
+            barcode: '3456789012345'
+          },
+          {
+            id: 'PRD004',
+            name: 'Organic Bananas',
+            category: 'Food',
+            price: 4.99,
+            stock: 3,
+            status: 'Low Stock',
+            sku: 'FOOD-FR-004',
+            barcode: '4567890123456'
+          },
+          {
+            id: 'PRD005',
+            name: 'Smart Watch Pro',
+            category: 'Electronics',
+            price: 249.99,
+            stock: 0,
+            status: 'Out of Stock',
+            sku: 'ELEC-SW-005',
+            barcode: '5678901234567'
+          }
+        ];
+        
+        setProducts(mockProducts);
+        setFilteredProducts(mockProducts);
+      } else {
+          setProducts(fetchedProducts);
+          setFilteredProducts(fetchedProducts);
+        }
+        
+        setIsLoading(false);
+        // Reset the fetching state here too
+        setIsFetching(false);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      toast.error('Failed to fetch products. Using mock data instead.');
+      
+      // Use mock data as fallback
       const mockProducts: Product[] = [
-    {
-      id: 'PRD001',
-      name: 'Smartphone X',
-      category: 'Electronics',
-      price: 699.99,
-      stock: 15,
-      sku: 'ELEC-SP-001',
+        {
+          id: 'PRD001',
+          name: 'Smartphone X',
+          category: 'Electronics',
+          price: 699.99,
+          stock: 15,
           status: 'In Stock',
+          sku: 'ELEC-SP-001',
           barcode: '1234567890123'
-    },
-    {
-      id: 'PRD002',
-      name: 'Wireless Headphones',
-      category: 'Electronics',
-      price: 149.99,
-      stock: 8,
-      sku: 'ELEC-WH-002',
-          status: 'In Stock',
-          barcode: '2345678901234'
-    },
-    {
-      id: 'PRD003',
-      name: 'Premium T-Shirt',
-      category: 'Clothing',
-      price: 29.99,
-      stock: 25,
-      sku: 'CLOTH-TS-003',
-          status: 'In Stock',
-          barcode: '3456789012345'
-    },
-    {
-      id: 'PRD004',
-      name: 'Organic Bananas',
-      category: 'Food',
-      price: 4.99,
-      stock: 3,
-      sku: 'FOOD-FR-004',
+        },
+        {
+          id: 'PRD002',
+          name: 'Wireless Headphones',
+          category: 'Electronics',
+          price: 149.99,
+          stock: 8,
           status: 'Low Stock',
+          sku: 'ELEC-WH-002',
+          barcode: '2345678901234'
+        },
+        {
+          id: 'PRD003',
+          name: 'Premium T-Shirt',
+          category: 'Clothing',
+          price: 29.99,
+          stock: 25,
+          status: 'In Stock',
+          sku: 'CLOTH-TS-003',
+          barcode: '3456789012345'
+        },
+        {
+          id: 'PRD004',
+          name: 'Organic Bananas',
+          category: 'Food',
+          price: 4.99,
+          stock: 3,
+          status: 'Low Stock',
+          sku: 'FOOD-FR-004',
           barcode: '4567890123456'
-    },
-    {
-      id: 'PRD005',
-      name: 'Smart Watch Pro',
-      category: 'Electronics',
-      price: 249.99,
-      stock: 0,
-      sku: 'ELEC-SW-005',
+        },
+        {
+          id: 'PRD005',
+          name: 'Smart Watch Pro',
+          category: 'Electronics',
+          price: 249.99,
+          stock: 0,
           status: 'Out of Stock',
+          sku: 'ELEC-SW-005',
           barcode: '5678901234567'
         }
       ];
@@ -106,10 +197,9 @@ export default function InventoryPage() {
       setProducts(mockProducts);
       setFilteredProducts(mockProducts);
       setIsLoading(false);
-    } catch (error) {
-      console.error('Error fetching products:', error);
-      toast.error('Failed to fetch products');
-      setIsLoading(false);
+    } finally {
+      // Reset the fetching state
+      setIsFetching(false);
     }
   };
 
@@ -153,10 +243,12 @@ export default function InventoryPage() {
   const handleDelete = async (id: string) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       try {
-        // In a production app, we would call the API
-        // await productsAPI.deleteProduct(id);
+        console.log('Deleting product with ID:', id);
         
-        // For now, just update the local state
+        // Call the API to delete the product
+        await productsAPI.deleteProduct(id);
+        
+        // Update the local state
         const updatedProducts = products.filter(product => product.id !== id);
         setProducts(updatedProducts);
         setFilteredProducts(filteredProducts.filter(product => product.id !== id));
@@ -164,7 +256,7 @@ export default function InventoryPage() {
         toast.success('Product deleted successfully');
       } catch (error) {
         console.error('Error deleting product:', error);
-        toast.error('Failed to delete product');
+        toast.error('Failed to delete product. Please try again.');
       }
     }
   };
@@ -204,23 +296,31 @@ export default function InventoryPage() {
     }));
   };
   
-  const handleUpdateProduct = () => {
+  const handleUpdateProduct = async () => {
     if (!editingProduct) return;
     
     try {
-      // In a production app, we would call the API
-      // await productsAPI.updateProduct(editingProduct.id, editForm);
+      // Create updated product object
+      const updatedProductData = {
+        name: editForm.name,
+        category: editForm.category,
+        price: parseFloat(editForm.price),
+        stock: parseInt(editForm.stock),
+        status: editForm.status,
+        sku: editForm.sku
+      };
       
-      // For now, just update the local state
+      console.log('Updating product with ID:', editingProduct.id);
+      console.log('Updated product data:', updatedProductData);
+      
+      // Call the API to update the product
+      await productsAPI.updateProduct(editingProduct.id, updatedProductData);
+      
+      // Update the local state
       const updatedProducts = products.map(product => 
         product.id === editingProduct.id ? {
           ...product,
-          name: editForm.name,
-          category: editForm.category,
-          price: parseFloat(editForm.price),
-          stock: parseInt(editForm.stock),
-          status: editForm.status,
-          sku: editForm.sku
+          ...updatedProductData
         } : product
       );
       
@@ -231,7 +331,7 @@ export default function InventoryPage() {
       setIsEditModalOpen(false);
     } catch (error) {
       console.error('Error updating product:', error);
-      toast.error('Failed to update product');
+      toast.error('Failed to update product. Please try again.');
     }
   };
 
@@ -287,12 +387,12 @@ export default function InventoryPage() {
     );
   }
 
-  if (!isAuthenticated || user?.role !== 'seller') {
+  if (!isAuthenticated || (user?.role !== 'seller' && user?.role !== 'admin')) {
     return (
       <div className="flex justify-center items-center min-h-[60vh]">
         <div className="text-center p-8 bg-white rounded-lg shadow-lg border border-gray-200">
-          <h2 className="text-2xl font-bold mb-4 text-gray-900">Seller Access Required</h2>
-          <p className="text-gray-800 font-medium mb-6">You need to be logged in as a seller to access this page.</p>
+          <h2 className="text-2xl font-bold mb-4 text-gray-900">Access Required</h2>
+          <p className="text-gray-800 font-medium mb-6">You need to be logged in as a seller or admin to access this page.</p>
           <Link 
             href="/login" 
             className="inline-block px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-bold"
@@ -305,7 +405,13 @@ export default function InventoryPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 relative">
+      {/* Loading overlay */}
+      {isLoading && (
+        <div className="absolute inset-0 bg-white bg-opacity-70 z-50 flex justify-center items-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
+        </div>
+      )}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center">
           <Link href="/dashboard" className="mr-4 text-blue-600 hover:text-blue-800 font-medium flex items-center">
@@ -583,7 +689,7 @@ export default function InventoryPage() {
                     name="category"
                     value={editForm.category}
                     onChange={handleEditFormChange}
-                    className="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-black"
+                    className="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-black appearance-none"
                     required
                   >
                     <option value="Electronics">Electronics</option>
@@ -649,7 +755,7 @@ export default function InventoryPage() {
                     name="status"
                     value={editForm.status}
                     onChange={handleEditFormChange}
-                    className="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-black"
+                    className="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-black appearance-none"
                     required
                   >
                     <option value="In Stock">In Stock</option>

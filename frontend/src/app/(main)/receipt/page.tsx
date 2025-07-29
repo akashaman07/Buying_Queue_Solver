@@ -53,6 +53,13 @@ export default function ReceiptPage() {
       return;
     }
 
+    // Check if user is a customer or admin
+    if (user?.role !== 'customer' && user?.role !== 'admin') {
+      router.push('/dashboard');
+      toast.error('Access Restricted: Only customers and admins can access receipts.');
+      return;
+    }
+
     // Get receipt data from localStorage
     const storedReceipt = localStorage.getItem('receipt_data');
     if (!storedReceipt) {
@@ -440,4 +447,4 @@ export default function ReceiptPage() {
       </div>
     </div>
   );
-} 
+}

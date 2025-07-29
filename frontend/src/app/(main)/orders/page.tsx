@@ -41,6 +41,12 @@ export default function OrdersPage() {
       return;
     }
 
+    // Restrict access to customers and admins only
+    if (user?.role !== 'customer' && user?.role !== 'admin') {
+      router.push('/dashboard');
+      return;
+    }
+
     // Load orders from localStorage and check for recent purchases
     loadOrders();
 

@@ -103,8 +103,8 @@ export default function AddNewProductPage() {
   };
 
   useEffect(() => {
-    // Redirect if not authenticated or not a seller
-    if (!isLoading && (!isAuthenticated || user?.role !== 'seller')) {
+    // Redirect if not authenticated or not a seller/admin
+    if (!isLoading && (!isAuthenticated || (user?.role !== 'seller' && user?.role !== 'admin'))) {
       router.push('/login');
     } else {
       setIsLoading(false);
@@ -231,12 +231,12 @@ export default function AddNewProductPage() {
     );
   }
 
-  if (!isAuthenticated || user?.role !== 'seller') {
+  if (!isAuthenticated || (user?.role !== 'seller' && user?.role !== 'admin')) {
     return (
       <div className="flex justify-center items-center min-h-[60vh]">
         <div className="text-center p-8 bg-white rounded-lg shadow-lg border border-gray-200">
-          <h2 className="text-2xl font-bold mb-4 text-gray-900">Seller Access Required</h2>
-          <p className="text-gray-800 font-medium mb-6">You need to be logged in as a seller to access this page.</p>
+          <h2 className="text-2xl font-bold mb-4 text-gray-900">Access Required</h2>
+          <p className="text-gray-800 font-medium mb-6">You need to be logged in as a seller or admin to access this page.</p>
           <Link 
             href="/login" 
             className="inline-block px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-bold"
@@ -249,15 +249,23 @@ export default function AddNewProductPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex items-center mb-6">
-        <Link href="/dashboard" className="mr-4 text-blue-600 hover:text-blue-800 font-medium flex items-center">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
-          </svg>
-          Back to Dashboard
-        </Link>
-        <h1 className="text-3xl font-bold text-gray-900">Add New Product</h1>
+    <div className="container mx-auto px-4 py-8 relative">
+      {/* Loading overlay */}
+      {isLoading && (
+        <div className="absolute inset-0 bg-white bg-opacity-70 z-50 flex justify-center items-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
+        </div>
+      )}
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center">
+          <Link href="/dashboard" className="mr-4 text-blue-600 hover:text-blue-800 font-medium flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
+            </svg>
+            Back to Dashboard
+          </Link>
+          <h1 className="text-3xl font-bold text-gray-900">Add New Product</h1>
+        </div>
       </div>
       
       <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
@@ -503,7 +511,7 @@ export default function AddNewProductPage() {
                   name="category"
                   value={formData.category}
                   onChange={handleChange}
-                  className="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                  className="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 appearance-none"
                   required
                 >
                   <option value="">Select a category</option>

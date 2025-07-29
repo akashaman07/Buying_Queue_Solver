@@ -3,6 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { useCart } from '@/context/CartContext';
+import { useAuth } from '@/context/AuthContext';
 
 interface Product {
   _id: string;
@@ -27,6 +28,7 @@ interface ProductCardProps {
 
 export default function ProductCard({ product }: ProductCardProps) {
   const { addItem } = useCart();
+  const { user } = useAuth();
 
   const handleAddToCart = () => {
     // Just pass the product as is - CartContext now handles optional fields
@@ -144,20 +146,29 @@ export default function ProductCard({ product }: ProductCardProps) {
             </svg>
             {product.category}
           </span>
-          <button
-            onClick={handleAddToCart}
-            disabled={getStock() <= 0}
-            className={`px-4 py-2 rounded-md font-medium flex items-center ${
-              getStock() > 0
-                ? 'bg-blue-600 text-white hover:bg-blue-700 transition-colors'
-                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-            }`}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
-              <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
-            </svg>
-            Add to Cart
-          </button>
+          {user?.role === 'customer' || user?.role === 'admin' ? (
+            <button
+              onClick={handleAddToCart}
+              disabled={getStock() <= 0}
+              className={`px-4 py-2 rounded-md font-medium flex items-center ${
+                getStock() > 0
+                  ? 'bg-blue-600 text-white hover:bg-blue-700 transition-colors'
+                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              }`}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
+              </svg>
+              Add to Cart
+            </button>
+          ) : (
+            <div className="px-4 py-2 rounded-md font-medium flex items-center bg-gray-100 text-gray-600">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+              </svg>
+              {user?.role === 'seller' ? 'Seller View' : user?.role === 'admin' ? 'Admin View' : 'View Only'}
+            </div>
+          )}
         </div>
         
         {product.barcode && (
@@ -171,4 +182,4 @@ export default function ProductCard({ product }: ProductCardProps) {
       </div>
     </div>
   );
-} 
+}

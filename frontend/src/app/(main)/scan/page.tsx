@@ -5,6 +5,7 @@ import BarcodeScanner from '@/components/scanner/BarcodeScanner';
 import ManualBarcodeEntry from '@/components/scanner/ManualBarcodeEntry';
 import { productsAPI } from '@/lib/api';
 import { useCart } from '@/context/CartContext';
+import { useAuth } from '@/context/AuthContext';
 import { toast } from 'react-toastify';
 import ProductCard from '@/components/ui/ProductCard';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -17,7 +18,9 @@ export default function ScanPage() {
   const [error, setError] = useState<string | null>(null);
   const [lastScannedBarcode, setLastScannedBarcode] = useState<string | null>(null);
   const [showManualEntry, setShowManualEntry] = useState(false);
+  const [quantityToAdd, setQuantityToAdd] = useState<number>(1);
   const { addItem } = useCart();
+  const { user } = useAuth();
   const router = useRouter();
   // Track if component is mounted to prevent state updates after unmount
   const isMountedRef = useRef(true);
@@ -146,6 +149,35 @@ export default function ScanPage() {
     }
   };
 
+  const handleAddToInventory = async () => {
+    if (scannedProduct) {
+      try {
+        // Update product stock by adding the specified quantity
+        const updatedProduct = {
+          ...scannedProduct,
+          stock: (parseInt(scannedProduct.stock) || 0) + quantityToAdd
+        };
+        
+        console.log('Updating product with ID:', scannedProduct._id);
+        console.log('Updated product data:', updatedProduct);
+        
+        // Make the API call to update the product
+        const result = await productsAPI.updateProduct(scannedProduct._id, updatedProduct);
+        console.log('Update result:', result);
+        
+        toast.success(`Added ${quantityToAdd} units of ${scannedProduct.name} to inventory!`);
+        
+        // Reset for next scan
+        setScannedProduct(null);
+        setQuantityToAdd(1);
+        setIsScanning(true);
+      } catch (error) {
+        console.error('Error updating inventory:', error);
+        toast.error('Failed to update inventory. Please try again.');
+      }
+    }
+  };
+
   const handleScanAgain = () => {
     setScannedProduct(null);
     setError(null);
@@ -191,8 +223,12 @@ export default function ScanPage() {
           <div className="mb-6">
             <h2 className="text-xl font-semibold mb-2">Scan a Product Barcode</h2>
             <p className="text-gray-600">
-              Position the barcode within the scanner view to add products to your cart.
-              If the product is not found, you'll be redirected to create a new one.
+              {user?.role === 'customer' 
+                ? 'Position the barcode within the scanner view to add products to your cart.'
+                : (user?.role === 'seller' || user?.role === 'admin')
+                ? 'Position the barcode within the scanner view to add products to inventory.'
+                : 'Position the barcode within the scanner view to scan products.'}
+              {' '}If the product is not found, you'll be redirected to create a new one.
             </p>
             
             <div className="mt-4 flex justify-end">
@@ -270,13 +306,49 @@ export default function ScanPage() {
             <ProductCard product={scannedProduct} />
           </div>
 
+          {(user?.role === 'seller' || user?.role === 'admin') && (
+            <div className="mb-4 p-4 bg-gray-50 rounded-lg">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Quantity to Add to Inventory:
+              </label>
+              <input
+                type="number"
+                min="1"
+                value={quantityToAdd}
+                onChange={(e) => setQuantityToAdd(parseInt(e.target.value) || 1)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <p className="text-sm text-gray-500 mt-1">
+                Current stock: {scannedProduct.stock || 0} units
+              </p>
+            </div>
+          )}
+
           <div className="flex flex-col sm:flex-row gap-4">
-            <button
-              onClick={handleAddToCart}
-              className="flex-1 py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-            >
-              Add to Cart
-            </button>
+            {user?.role === 'customer' ? (
+              <button
+                onClick={handleAddToCart}
+                className="flex-1 py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              >
+                Add to Cart
+              </button>
+            ) : (user?.role === 'seller' || user?.role === 'admin') ? (
+              <button
+                onClick={handleAddToInventory}
+                className="flex-1 py-2 px-4 bg-green-600 text-white rounded-md hover:bg-green-700"
+              >
+                Add to Inventory
+              </button>
+            
+            ) : (
+              <button
+                onClick={() => toast.info('Please log in to perform actions')}
+                className="flex-1 py-2 px-4 bg-gray-400 text-white rounded-md cursor-not-allowed"
+                disabled
+              >
+                Login Required
+              </button>
+            )}
             <button
               onClick={handleScanAgain}
               className="flex-1 py-2 px-4 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
@@ -288,4 +360,4 @@ export default function ScanPage() {
       )}
     </div>
   );
-} 
+}

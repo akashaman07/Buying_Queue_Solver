@@ -176,7 +176,7 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 10000, // Increased to 10 seconds
+  timeout: 30000, // Increased to 30 seconds to prevent timeouts
 });
 
 // Add a request interceptor to include the auth token in requests
@@ -224,7 +224,7 @@ const checkBackendStatus = async () => {
 };
 
 // Helper function to simulate API delay for mock responses
-const mockDelay = (ms = 500) => new Promise(resolve => setTimeout(resolve, ms));
+const mockDelay = (ms = 100) => new Promise(resolve => setTimeout(resolve, ms));
 
 // Authentication API calls
 const authAPI = {
@@ -638,4 +638,4 @@ export {
   paymentsAPI,
   usersAPI,
   checkBackendStatus
-}; 
+};

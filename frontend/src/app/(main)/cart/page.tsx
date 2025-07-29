@@ -10,15 +10,36 @@ import { toast } from 'react-toastify';
 
 export default function CartPage() {
   const { items, removeItem, updateQuantity, clearCart, totalAmount } = useCart();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const [orderId, setOrderId] = useState<string>(`order_${Date.now()}`);
   const router = useRouter();
 
   useEffect(() => {
     if (!isAuthenticated) {
       router.push('/login');
+    } else if (user?.role !== 'customer' && user?.role !== 'admin') {
+      router.push('/dashboard');
+      toast.error('Access Restricted: Only customers and admins can access the shopping cart.');
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, user, router]);
+
+  // Show access denied for non-customers and non-admins
+  if (isAuthenticated && user?.role !== 'customer' && user?.role !== 'admin') {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="bg-white rounded-lg shadow-md p-8 text-center">
+          <h2 className="text-2xl font-semibold text-gray-700 mb-4">Access Restricted</h2>
+          <p className="text-gray-600 mb-6">Shopping cart is only available for customers and admins. As a {user?.role}, you can manage inventory and orders from your dashboard.</p>
+          <button 
+            onClick={() => router.push('/dashboard')}
+            className="bg-blue-600 text-white px-6 py-3 rounded-md font-medium hover:bg-blue-700 transition-colors"
+          >
+            Go to Dashboard
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   const handleQuantityChange = (productId: string, newQuantity: number) => {
     if (newQuantity <= 0) {
@@ -265,4 +286,4 @@ export default function CartPage() {
       </div>
     </div>
   );
-} 
+}

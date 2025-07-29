@@ -5,15 +5,12 @@ import Link from 'next/link';
 import { productsAPI } from '@/lib/api';
 import ProductCard from '@/components/ui/ProductCard';
 import { useAuth } from '@/context/AuthContext';
-import { useRouter } from 'next/navigation';
 
 export default function Home() {
   const [featuredProducts, setFeaturedProducts] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { user, isAuthenticated } = useAuth();
-  const router = useRouter();
-  const [barcode, setBarcode] = useState('');
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -72,12 +69,7 @@ export default function Home() {
     fetchProducts();
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (barcode.trim()) {
-      router.push(`/scan?barcode=${barcode.trim()}`);
-    }
-  };
+
 
   return (
     <div className="space-y-12">
@@ -263,55 +255,7 @@ export default function Home() {
         </div>
       </section>
 
-      <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-lg mb-8">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4">Quick Start</h2>
-        
-        <form onSubmit={handleSubmit} className="mb-6">
-          <div className="mb-4">
-            <label htmlFor="barcode" className="block text-sm font-medium text-gray-700 mb-1">
-              Enter a barcode
-            </label>
-            <div className="flex">
-              <input
-                type="text"
-                id="barcode"
-                value={barcode}
-                onChange={(e) => setBarcode(e.target.value)}
-                placeholder="Enter product barcode"
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-l-md focus:ring-blue-500 focus:border-blue-500"
-              />
-              <button
-                type="submit"
-                className="bg-blue-600 text-white px-4 py-2 rounded-r-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                Go
-              </button>
-            </div>
-          </div>
-        </form>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Link 
-            href="/scan"
-            className="flex items-center justify-center p-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-            </svg>
-            Scan Products
-          </Link>
-          
-          <Link 
-            href="/cart"
-            className="flex items-center justify-center p-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-            </svg>
-            View Cart
-          </Link>
-        </div>
-      </div>
+
     </div>
   );
 }

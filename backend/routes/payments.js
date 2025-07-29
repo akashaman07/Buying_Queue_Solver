@@ -18,10 +18,11 @@ router.use(protect);
 router.get('/', getPayments);
 router.get('/:id', getPayment);
 
-// Routes for payment processing
+// Routes for payment processing (customers only)
 router.post(
   '/create-payment-intent',
   [check('orderId', 'Order ID is required').not().isEmpty()],
+  authorize('customer'),
   createPaymentIntent
 );
 
@@ -31,10 +32,11 @@ router.post(
     check('paymentIntentId', 'Payment intent ID is required').not().isEmpty(),
     check('orderId', 'Order ID is required').not().isEmpty(),
   ],
+  authorize('customer'),
   processPayment
 );
 
 // Route for refunds (admin only)
 router.post('/:id/refund', authorize('admin'), processRefund);
 
-module.exports = router; 
+module.exports = router;
