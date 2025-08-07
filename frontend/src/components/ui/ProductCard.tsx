@@ -11,7 +11,7 @@ interface Product {
   price: number;
   description: string;
   imageUrl?: string;
-  images?: string[];
+  images?: Array<{public_id: string, url: string}>;
   barcode?: string;
   category: string;
   stock?: number;
@@ -50,7 +50,7 @@ export default function ProductCard({ product }: ProductCardProps) {
     if (product.imageUrl) {
       imageUrl = product.imageUrl;
     } else if (product.images && product.images.length > 0) {
-      imageUrl = product.images[0];
+      imageUrl = product.images[0].url;
     } else {
       imageUrl = '/image/pexels-kimona-556745-2280926.jpg'; // Local fallback image
     }

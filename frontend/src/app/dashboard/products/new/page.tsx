@@ -334,7 +334,9 @@ export default function AddNewProductPage() {
             {existingProduct.images && existingProduct.images.length > 0 && (
               <div className="flex justify-center mb-6">
                 <img 
-                  src={existingProduct.images[0]} 
+                  src={typeof existingProduct.images[0] === 'object' && existingProduct.images[0].url
+                    ? existingProduct.images[0].url
+                    : existingProduct.images[0]} 
                   alt={existingProduct.name} 
                   className="h-48 w-auto object-contain border rounded-md"
                 />

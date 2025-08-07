@@ -9,7 +9,7 @@ interface Product {
   price: number;
   barcode?: string;
   imageUrl?: string;
-  images?: string[];
+  images?: Array<{public_id: string, url: string}>;
   finalPrice?: number;
   stock?: number;
   category: string;
@@ -238,4 +238,4 @@ export function useCart() {
     throw new Error('useCart must be used within a CartProvider');
   }
   return context;
-} 
+}

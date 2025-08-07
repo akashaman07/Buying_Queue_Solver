@@ -49,37 +49,62 @@ export default function CartPage() {
     }
   };
 
-  const handlePaymentSuccess = (paymentData: any) => {
-    // Update receipt data with cart items
-    const storedReceipt = localStorage.getItem('receipt_data');
-    
-    if (storedReceipt) {
-      try {
-        const receiptData = JSON.parse(storedReceipt);
-        
-        // Add cart items to receipt data
-        receiptData.items = items.map(item => ({
-          id: item.product._id,
-          name: item.product.name,
-          price: item.product.finalPrice !== undefined ? item.product.finalPrice : item.product.price,
-          quantity: item.quantity,
-          total: (item.product.finalPrice !== undefined ? item.product.finalPrice : item.product.price) * item.quantity
-        }));
-        
-        localStorage.setItem('receipt_data', JSON.stringify(receiptData));
+  const handlePaymentSuccess = async (paymentData: any) => {
+    try {
+      // Update receipt data with cart items
+      const storedReceipt = localStorage.getItem('receipt_data');
+      
+      if (storedReceipt) {
+        try {
+          const receiptData = JSON.parse(storedReceipt);
+          
+          // Add cart items to receipt data
+          receiptData.items = items.map(item => ({
+            id: item.product._id,
+            name: item.product.name,
+            price: item.product.finalPrice !== undefined ? item.product.finalPrice : item.product.price,
+            quantity: item.quantity,
+            total: (item.product.finalPrice !== undefined ? item.product.finalPrice : item.product.price) * item.quantity
+          }));
+          
+          localStorage.setItem('receipt_data', JSON.stringify(receiptData));
 
-        // Save to order history
-        saveToOrderHistory(receiptData);
-      } catch (error) {
-        console.error('Error updating receipt data with items:', error);
+          // Save to order history
+          saveToOrderHistory(receiptData);
+        } catch (error) {
+          console.error('Error updating receipt data with items:', error);
+        }
       }
+      
+      // Create order in the backend to update product quantities
+      const orderData = {
+        products: items.map(item => ({
+          product: item.product._id,
+          quantity: item.quantity
+        })),
+        paymentMethod: 'credit_card'
+      };
+      
+      // Call the API to create the order
+      try {
+        const { ordersAPI } = await import('@/lib/api');
+        await ordersAPI.createOrder(orderData);
+        console.log('Order created successfully');
+      } catch (error) {
+        console.error('Error creating order:', error);
+        // Continue with the process even if order creation fails
+        // This ensures the user experience isn't disrupted
+      }
+      
+      // Clear the cart
+      clearCart();
+      
+      // Redirect to receipt page
+      router.push('/receipt');
+    } catch (error) {
+      console.error('Error in payment success handler:', error);
+      toast.error('There was an error processing your order. Please try again.');
     }
-    
-    // Clear the cart
-    clearCart();
-    
-    // Redirect to receipt page
-    router.push('/receipt');
   };
 
   // Save purchase to order history
@@ -144,7 +169,10 @@ export default function CartPage() {
     if (item.product.imageUrl) {
       return item.product.imageUrl;
     } else if (item.product.images && item.product.images.length > 0) {
-      return item.product.images[0];
+      // Handle the new image structure where images are objects with public_id and url
+      return typeof item.product.images[0] === 'object' && item.product.images[0].url
+        ? item.product.images[0].url
+        : item.product.images[0];
     }
     return '/placeholder-product.jpg';
   };

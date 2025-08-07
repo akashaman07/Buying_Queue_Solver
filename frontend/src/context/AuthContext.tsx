@@ -50,6 +50,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           const parsedUser = JSON.parse(storedUser);
           setUser(parsedUser);
           setIsAuthenticated(true);
+          
+          // Check if token exists, if not create one
+          if (!localStorage.getItem('token')) {
+            const mockToken = `mock-token-${parsedUser.role}-${Date.now()}`;
+            localStorage.setItem('token', mockToken);
+            console.log('Generated new token for existing mock user');
+          } else {
+            console.log('Token already exists for mock user');
+          }
+          
           setIsLoading(false);
           return;
         }
@@ -94,8 +104,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setUser(mockUser);
         setIsAuthenticated(true);
         localStorage.setItem('mockUser', JSON.stringify(mockUser));
+        
+        // Generate and store a mock token
+        const mockToken = `mock-token-customer-${Date.now()}`;
+        localStorage.setItem('token', mockToken);
+        
         toast.success('Logged in as demo user!');
-        return { success: true, user: mockUser };
+        return { success: true, user: mockUser, token: mockToken };
       }
       
       // Admin demo login
@@ -118,8 +133,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setUser(mockAdmin);
         setIsAuthenticated(true);
         localStorage.setItem('mockUser', JSON.stringify(mockAdmin));
+        
+        // Generate and store a mock token
+        const mockToken = `mock-token-admin-${Date.now()}`;
+        localStorage.setItem('token', mockToken);
+        
         toast.success('Logged in as admin!');
-        return { success: true, user: mockAdmin };
+        return { success: true, user: mockAdmin, token: mockToken };
       }
       
       // Seller demo login
@@ -142,8 +162,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setUser(mockSeller);
         setIsAuthenticated(true);
         localStorage.setItem('mockUser', JSON.stringify(mockSeller));
+        
+        // Generate and store a mock token
+        const mockToken = `mock-token-seller-${Date.now()}`;
+        localStorage.setItem('token', mockToken);
+        
         toast.success('Logged in as seller!');
-        return { success: true, user: mockSeller };
+        return { success: true, user: mockSeller, token: mockToken };
       }
 
       // If not a demo user, try real API

@@ -165,12 +165,21 @@ export default function ScanPage() {
         const result = await productsAPI.updateProduct(scannedProduct._id, updatedProduct);
         console.log('Update result:', result);
         
+        // Update the local scannedProduct state with the new stock value
+        setScannedProduct({
+          ...scannedProduct,
+          stock: (parseInt(scannedProduct.stock) || 0) + quantityToAdd
+        });
+        
         toast.success(`Added ${quantityToAdd} units of ${scannedProduct.name} to inventory!`);
         
-        // Reset for next scan
-        setScannedProduct(null);
-        setQuantityToAdd(1);
-        setIsScanning(true);
+        // Don't reset immediately to show the updated stock
+        setTimeout(() => {
+          // Reset for next scan
+          setScannedProduct(null);
+          setQuantityToAdd(1);
+          setIsScanning(true);
+        }, 2000); // Show the updated stock for 2 seconds before resetting
       } catch (error) {
         console.error('Error updating inventory:', error);
         toast.error('Failed to update inventory. Please try again.');

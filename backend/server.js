@@ -54,7 +54,10 @@ const initializeDB = async () => {
             category: 'Electronics',
             stock: 50,
             isAvailable: true,
-            imageUrl: '/image/pexels-mart-production-9558265.jpg ',
+            images: [{
+              public_id: 'buying_queue_solver/products/smartphone-x',
+              url: 'https://res.cloudinary.com/buyingqueuesolver/image/upload/v1/buying_queue_solver/products/smartphone-x'
+            }],
             seller: demoSeller._id
           },
           {
@@ -65,7 +68,10 @@ const initializeDB = async () => {
             category: 'Electronics',
             stock: 30,
             isAvailable: true,
-            imageUrl: '/image/pexels-pavel-danilyuk-8038334.jpg ',
+            images: [{
+              public_id: 'buying_queue_solver/products/wireless-headphones',
+              url: 'https://res.cloudinary.com/buyingqueuesolver/image/upload/v1/buying_queue_solver/products/wireless-headphones'
+            }],
             seller: demoSeller._id
           },
           {
@@ -76,7 +82,10 @@ const initializeDB = async () => {
             category: 'Food',
             stock: 100,
             isAvailable: true,
-            imageUrl: '/image/pexels-noah-erickson-97554-404280.jpg',
+            images: [{
+              public_id: 'buying_queue_solver/products/organic-bananas',
+              url: 'https://res.cloudinary.com/buyingqueuesolver/image/upload/v1/buying_queue_solver/products/organic-bananas'
+            }],
             seller: demoSeller._id
           },
           {
@@ -87,7 +96,10 @@ const initializeDB = async () => {
             category: 'Clothing',
             stock: 200,
             isAvailable: true,
-            imageUrl: '/image/pexels-kimona-556745-2280926.jpg',
+            images: [{
+              public_id: 'buying_queue_solver/products/cotton-tshirt',
+              url: 'https://res.cloudinary.com/buyingqueuesolver/image/upload/v1/buying_queue_solver/products/cotton-tshirt'
+            }],
             seller: demoSeller._id
           }
         ];
@@ -134,7 +146,10 @@ const mockProducts = [
     category: 'Electronics',
     stock: 50,
     isAvailable: true,
-    images: ['https://via.placeholder.com/300'],
+    images: [{
+      public_id: 'buying_queue_solver/products/smartphone-x-mock',
+      url: 'https://res.cloudinary.com/buyingqueuesolver/image/upload/v1/buying_queue_solver/products/smartphone-x'
+    }],
     seller: {
       _id: '60d21b4667d0d8992e610c80',
       name: 'Tech Store',
@@ -151,7 +166,10 @@ const mockProducts = [
     category: 'Electronics',
     stock: 30,
     isAvailable: true,
-    images: ['https://via.placeholder.com/300'],
+    images: [{
+      public_id: 'buying_queue_solver/products/wireless-headphones-mock',
+      url: 'https://res.cloudinary.com/buyingqueuesolver/image/upload/v1/buying_queue_solver/products/wireless-headphones'
+    }],
     seller: {
       _id: '60d21b4667d0d8992e610c80',
       name: 'Tech Store',
@@ -168,7 +186,10 @@ const mockProducts = [
     category: 'Groceries',
     stock: 100,
     isAvailable: true,
-    images: ['https://via.placeholder.com/300'],
+    images: [{
+      public_id: 'buying_queue_solver/products/organic-bananas-mock',
+      url: 'https://res.cloudinary.com/buyingqueuesolver/image/upload/v1/buying_queue_solver/products/organic-bananas'
+    }],
     seller: {
       _id: '60d21b4667d0d8992e610c81',
       name: 'Fresh Market',
@@ -185,7 +206,10 @@ const mockProducts = [
     category: 'Clothing',
     stock: 200,
     isAvailable: true,
-    images: ['https://via.placeholder.com/300'],
+    images: [{
+      public_id: 'buying_queue_solver/products/cotton-tshirt-mock',
+      url: 'https://res.cloudinary.com/buyingqueuesolver/image/upload/v1/buying_queue_solver/products/cotton-tshirt'
+    }],
     seller: {
       _id: '60d21b4667d0d8992e610c82',
       name: 'Fashion Store',
@@ -223,4 +247,4 @@ app.use(errorHandler);
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-}); 
+});

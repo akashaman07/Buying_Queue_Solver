@@ -68,9 +68,9 @@ OrderSchema.pre(/^find/, function (next) {
     select: 'name email',
   }).populate({
     path: 'products.product',
-    select: 'name price imageUrl',
+    select: 'name price images',
   });
   next();
 });
 
-module.exports = mongoose.model('Order', OrderSchema); 
+module.exports = mongoose.model('Order', OrderSchema);

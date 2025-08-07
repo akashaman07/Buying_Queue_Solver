@@ -26,7 +26,7 @@ export default function ProductsPage() {
             name: 'Sample Product 1',
             description: 'This is a sample product',
             price: 19.99,
-            images: ['/image/pexels-kimona-556745-2280926.jpg'],
+            images: [{ public_id: 'sample1', url: '/image/pexels-kimona-556745-2280926.jpg' }],
             category: 'Sample',
             seller: { name: 'Sample Store' }
           },
@@ -35,7 +35,7 @@ export default function ProductsPage() {
             name: 'Sample Product 2',
             description: 'Another sample product',
             price: 29.99,
-            images: ['/image/pexels-mart-production-9558265.jpg'],
+            images: [{ public_id: 'sample2', url: '/image/pexels-mart-production-9558265.jpg' }],
             category: 'Sample',
             seller: { name: 'Sample Store' }
           },
@@ -44,7 +44,7 @@ export default function ProductsPage() {
             name: 'Sample Product 3',
             description: 'Yet another sample product',
             price: 39.99,
-            images: ['/image/pexels-noah-erickson-97554-404280.jpg'],
+            images: [{ public_id: 'sample3', url: '/image/pexels-noah-erickson-97554-404280.jpg' }],
             category: 'Sample',
             seller: { name: 'Sample Store' }
           },
@@ -53,7 +53,7 @@ export default function ProductsPage() {
             name: 'Sample Product 4',
             description: 'Final sample product',
             price: 49.99,
-            images: ['/image/pexels-pavel-danilyuk-8038334.jpg'],
+            images: [{ public_id: 'sample4', url: '/image/pexels-pavel-danilyuk-8038334.jpg' }],
             category: 'Sample',
             seller: { name: 'Sample Store' }
           }

@@ -29,7 +29,7 @@ export default function Home() {
             name: 'Smartphone X',
             description: 'Latest smartphone with amazing features',
             price: 699.99,
-            images: ['/image/smartphone.jpg'],
+            images: [{ public_id: 'sample1', url: '/image/smartphone.jpg' }],
             category: 'Electronics',
             seller: { name: 'Sample Store' }
           },
@@ -38,7 +38,7 @@ export default function Home() {
             name: 'Wireless Headphones',
             description: 'Premium noise-cancelling headphones',
             price: 149.99,
-            images: ['/image/wireless-headphone.jpg'],
+            images: [{ public_id: 'sample2', url: '/image/wireless-headphone.jpg' }],
             category: 'Electronics',
             seller: { name: 'Sample Store' }
           },
@@ -47,7 +47,7 @@ export default function Home() {
             name: 'T-shirt',
             description: 'Comfortable cotton t-shirt',
             price: 29.99,
-            images: ['/image/t-shirt.jpg'],
+            images: [{ public_id: 'sample3', url: '/image/t-shirt.jpg' }],
             category: 'Clothing',
             seller: { name: 'Sample Store' }
           },
@@ -56,7 +56,7 @@ export default function Home() {
             name: 'Banana',
             description: 'Fresh organic banana',
             price: 0.99,
-            images: ['/image/banana.jpg'],
+            images: [{ public_id: 'sample4', url: '/image/banana.jpg' }],
             category: 'Food',
             seller: { name: 'Sample Store' }
           }

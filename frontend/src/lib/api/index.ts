@@ -58,7 +58,7 @@ const mockData = {
       price: 699.99,
       description: 'Latest smartphone with amazing features',
       category: 'Electronics',
-      images: ['/image/smartphone.jpg'],
+      images: [{ public_id: 'mock1', url: '/image/smartphone.jpg' }],
       stock: 15,
     },
     {
@@ -67,7 +67,7 @@ const mockData = {
       price: 149.99,
       description: 'Premium noise-cancelling headphones',
       category: 'Electronics',
-      images: ['/image/wireless- headphone.jpg'],
+      images: [{ public_id: 'mock2', url: '/image/wireless- headphone.jpg' }],
       stock: 8,
     },
     {
@@ -76,7 +76,7 @@ const mockData = {
       price: 29.99,
       description: 'Comfortable cotton t-shirt',
       category: 'Clothing',
-      images: ['/image/t-shirt.jpg'],
+      images: [{ public_id: 'mock3', url: '/image/t-shirt.jpg' }],
       stock: 20,
     },
     {
@@ -85,7 +85,7 @@ const mockData = {
       price: 0.99,
       description: 'Fresh organic banana',
       category: 'Food',
-      images: ['/image/banana.jpg'],
+      images: [{ public_id: 'mock4', url: '/image/banana.jpg' }],
       stock: 50,
     },
   ],
@@ -457,8 +457,39 @@ const productsAPI = {
     try {
       const response = await api.put(`/products/${id}`, productData);
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
       console.error(`UpdateProduct error for ID ${id}:`, error);
+      
+      // If network error or backend unavailable, or using mock token, use mock data
+      if (error.code === 'ECONNABORTED' || !error.response || 
+          (error.response?.status === 401 && localStorage.getItem('token')?.startsWith('mock-token'))) {
+        console.log('Using mock product update due to connection issue or mock token');
+        await mockDelay();
+        
+        // Find the product in mock data
+        const productIndex = mockData.products.findIndex(p => p._id === id);
+        
+        if (productIndex === -1) {
+          throw { 
+            response: { 
+              data: { message: `Product not found with id of ${id}` } 
+            } 
+          };
+        }
+        
+        // Update the product in mock data
+        mockData.products[productIndex] = {
+          ...mockData.products[productIndex],
+          ...productData,
+          updatedAt: new Date().toISOString()
+        };
+        
+        return {
+          success: true,
+          data: mockData.products[productIndex]
+        };
+      }
+      
       throw error;
     }
   },
